@@ -42,9 +42,7 @@ class RemClient extends Client {
             this.events.get('ready').run(this);
         })
 
-        this.events.forEach(event => {
-            event.start(this);
-        })
+        this.on('interactionCreate', (interaction) => this.events.get('interactionCreate').run(this, interaction))
 
 
 
