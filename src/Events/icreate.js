@@ -8,37 +8,39 @@ module.exports = {
      * @param {Client} client 
      * @param {CommandInteraction} interaction 
      */
-    async run(client) {
+    async run(client, interaction) {
 
-        client.on('interactionCreate', async (interaction) => {
-            const { commandName } = interaction;
 
-            if (!interaction.isCommand()) return;
+        const { commandName } = interaction;
 
-            let command = client.commands.get(commandName);
+        if (!interaction.isCommand()) return;
 
-            let commands = client.application.commands;
+        let command = client.commands.get(commandName);
 
-            let devguild;
+        let commands = client.application.commands;
 
-            if (process.env.BETA === 'true') devguild = client.guilds.cache.get(process.env.DEVGUILDID);
+        let devguild;
 
-            if (process.env.BETA === 'true') commands = devguild.commands;
+        if (process.env.BETA === 'true') devguild = client.guilds.cache.get(process.env.DEVGUILDID);
 
-            if (!command || command.slash === 'false') {
-                interaction.reply(`This command is ether removed or is msg only so i removed it`);
+        if (process.env.BETA === 'true') commands = devguild.commands;
 
-                commands.delete(interaction.commandId).then(cmd => client.logger.error(`removed ${commandName} from slash`))
-            }
+        if (!command || command.slash === 'false') {
+            interaction.reply(`This command is ether removed or is msg only so i removed it`);
 
-            const permcheck = new Permissions(command.perm);
+            commands.delete(interaction.commandId).then(cmd => client.logger.error(`removed ${commandName} from slash`))
+        }
 
-            if (!interaction.member.permissions.has(permcheck)) return interaction.reply({ content: `Missing ${permcheck.toArray().join(", ")}`, ephemeral: true });
+        let apiclient = client.apiclient
 
-            let extras = {};
-            if (command.slash === "both") command.both(client, null, null, interaction, extras, "int", apiclient);
-            else command.command(client, interaction, extras, apiclient);
-        })
+        const permcheck = new Permissions(command.perm);
+
+        if (!interaction.member.permissions.has(permcheck)) return interaction.reply({ content: `Missing ${permcheck.toArray().join(", ")}`, ephemeral: true });
+
+        let extras = {};
+        if (command.slash === "both") command.both(client, null, null, interaction, extras, "int", apiclient);
+        else command.command(client, interaction, extras, apiclient);
+
 
     }
 }
