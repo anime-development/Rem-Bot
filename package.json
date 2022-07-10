@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/anime-development/Rem-Bot/issues"
   },
-  "homepage": "https://github.com/anime-development/Rem-Bot#readme"
+  "homepage": "https://github.com/anime-development/Rem-Bot#readme",
+  "dependencies": {
+    "discord.js": "^13.8.1",
+    "dotenv": "^16.0.1",
+    "fs": "^0.0.1-security",
+    "moment": "^2.29.4",
+    "ms": "^2.1.3",
+    "ram-api.js": "^9.0.0"
+  }
 }
